@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Book Library</title>
+    <style>
+      /* General Page Styling */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa; /* Light gray background for better readability */
+      }
+      
+      /* Header Styling */
+      .header {
+        background-color: #6c757d; /* Dark gray background */
+        color: white;
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        justify-content: space-between; /* Align content to the left and right */
+        align-items: center; /* Vertically center content */
+      }
+
+      .header-nav {
+        display: flex;
+        align-items: center;
+      }
+
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .header-nav a {
+        color: white; /* White text for links */
+        text-decoration: none;
+        margin-left: 20px;
+        font-size: 18px;
+        padding: 10px;
+      }
+
+      .header-nav a:hover {
+        text-decoration: underline;
+        background-color: rgba(255, 255, 255, 0.2); /* Light background on hover */
+        border-radius: 5px; /* Rounded corners on hover */
+      }
+
+      /* Table Styling */
+      .task-table {
+        width: 80%; /* Increase width for better layout */
+        margin: 40px auto;
+        border-collapse: collapse;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        background-color: white; /* White background for the table */
+      }
+
+      .task-table th, .task-table td {
+        border: 1px solid #6c757d;
+        padding: 15px;
+        text-align: left;
+      }
+
+      .task-table th {
+        background-color: #6c757d; /* Blue background for the header */
+        color: white; /* White text */
+      }
+
+      .task-table tr:hover {
+        background-color: #f1f1f1; /* Light gray background on row hover */
+      }
+
+      .task-table td a {
+        text-decoration: none;
+        color: #007bff; /* Blue text for links */
+        font-weight: bold;
+      }
+
+      .task-table td a:hover {
+        text-decoration: underline;
+      }
+
+      /* Button Styling */
+      .new-task-btn {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px;
+        background-color: #28a745; /* Green background */
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        font-size: 18px;
+        text-decoration: none;
+      }
+
+      .new-task-btn:hover {
+        background-color: #218838; /* Darker green on hover */
+      }
+      /* Container for the search form */
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+/* Style for the search field */
+.search-form input[type="search"] {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+  width: 200px;
+  transition: border-color 0.3s;
+}
+
+.search-form input[type="search"]:focus {
+  border-color: #007bff;
+}
+
+/* Style for the search button */
+.search-form input[type="submit"] {
+  padding: 10px 15px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-form input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>Books Collection</h1>
+      <div class="header-nav">
+        <%= render partial: "partial/header"%>
+      </div>
+    </header> 
+
+    <%= search_form_for @q, class: "search-form" do |f| %>
+      <%= f.search_field :title_cont, placeholder: "Search..." %>
+      <%= f.submit "Search!" %>
+    <% end %>
+    
+    
+    <h1 style="text-align: center;">Book Library System</h1>
+    <table class="task-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% if session[:user_id] %>
+        <% @books.each do |book| %>
+          <tr>
+            <td> 
+              <%= link_to book.title, book_path(book) %>
+            </td>
+          </tr>
+        <% end %>
+      <%end%> 
+      </tbody>
+    </table>
+    <% if session[:user_id] %>
+    <% @user = User.find_by(id: session[:user_id])%>
+      <% if @user.role == 'owner' %>
+        <%= link_to "Add New Book", new_book_path, class: 'new-task-btn' %>
+      <% end %>
+      <% end %>
+ </body>
+</html>
